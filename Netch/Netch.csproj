@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <StartupObject>Netch.Netch</StartupObject>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
+    <ApplicationIcon>Netch.ico</ApplicationIcon>
+    <Platforms>x86;x64</Platforms>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <OutputPath>bin\x86\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <OutputPath>bin\x86\Release\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <OutputPath>bin\x64\Release\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ini-parser" Version="2.5.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Buffers" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="@ECHO OFF&#xD;&#xA;RD /S /Q $(TargetDir)bin &gt; NUL 2&gt;&amp;1&#xD;&#xA;RD /S /Q $(TargetDir)i18n &gt; NUL 2&gt;&amp;1&#xD;&#xA;RD /S /Q $(TargetDir)mode &gt; NUL 2&gt;&amp;1&#xD;&#xA;&#xD;&#xA;MKDIR $(TargetDir)bin &gt; NUL 2&gt;&amp;1&#xD;&#xA;MKDIR $(TargetDir)i18n &gt; NUL 2&gt;&amp;1&#xD;&#xA;MKDIR $(TargetDir)mode &gt; NUL 2&gt;&amp;1&#xD;&#xA;&#xD;&#xA;COPY /Y $(SolutionDir)binaries\$(PlatformName)\* $(TargetDir)bin &gt; NUL 2&gt;&amp;1&#xD;&#xA;COPY /Y $(SolutionDir)binaries\* $(TargetDir)bin &gt; NUL 2&gt;&amp;1&#xD;&#xA;MOVE /Y $(TargetDir)bin\nfapinet.dll $(TargetDir)nfapinet.dll &gt; NUL 2&gt;&amp;1&#xD;&#xA;COPY /Y $(SolutionDir)translations\i18n\* $(TargetDir)i18n &gt; NUL 2&gt;&amp;1&#xD;&#xA;COPY /Y $(SolutionDir)modes\mode\*.txt $(TargetDir)mode &gt; NUL 2&gt;&amp;1" />
+  </Target>
+
+</Project>
